@@ -2,7 +2,10 @@ import Database from "better-sqlite3";
 import fs from "fs";
 import path from "path";
 
-const DATA_DIR = path.join(process.cwd(), "data");
+const DATA_DIR = process.env.NODE_ENV === "production" 
+  ? "/app/data" 
+  : path.join(process.cwd(), "data");
+
 if (!fs.existsSync(DATA_DIR)) {
   fs.mkdirSync(DATA_DIR, { recursive: true });
 }
@@ -154,3 +157,4 @@ export function logActivity(
     "INSERT INTO activity_log (entity_type, entity_id, message) VALUES (?, ?, ?)"
   ).run(entityType, entityId, message);
 }
+
